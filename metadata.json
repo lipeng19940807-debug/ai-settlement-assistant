@@ -1,0 +1,5 @@
+{
+  "name": "AI Settlement Assistant",
+  "description": "An intelligent web application for settlement operators to streamline data processing. It supports file uploads, AI-powered field mapping, natural language rule generation, and one-click processing to automate complex settlement tasks.",
+  "requestFramePermissions": []
+}

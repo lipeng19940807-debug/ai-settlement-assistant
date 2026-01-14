@@ -1,0 +1,108 @@
+{
+  "name": "ai-settlement-assistant",
+  "version": "1.2.1",
+  "description": "智运结算 AI - 智能对账工具",
+  "main": "electron/main.js",
+  "author": "Settlement AI Team",
+  "license": "MIT",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "build:client": "cd client && npm run build",
+    "build:copy": "cp -r client/dist server/public",
+    "build:all": "npm run build:client && npm run build:copy",
+    "electron:dev": "NODE_ENV=development electron .",
+    "electron:build": "npm run build:all && electron-builder",
+    "electron:build:mac": "npm run build:all && electron-builder --mac",
+    "electron:build:win": "npm run build:all && electron-builder --win",
+    "electron:build:all": "npm run build:all && electron-builder --mac --win"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.settlement.ai",
+    "productName": "智运结算AI",
+    "copyright": "Copyright © 2026",
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "files": [
+      "electron/**/*",
+      "server/**/*",
+      "!server/uploads/*",
+      "!server/outputs/*",
+      "!**/node_modules/.cache",
+      "!**/*.map"
+    ],
+    "extraResources": [
+      {
+        "from": "server",
+        "to": "server",
+        "filter": [
+          "**/*",
+          "!uploads/*",
+          "!outputs/*"
+        ]
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.business",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "title": "智运结算AI",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "智运结算AI"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Office"
+    }
+  }
+}

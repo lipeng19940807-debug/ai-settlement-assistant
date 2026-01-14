@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+release/
+client/dist/
+server/public/
+
+# Environment variables (IMPORTANT: Don't commit API keys!)
+.env
+.env.local
+.env.*.local
+server/.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Uploads and outputs
+server/uploads/*
+server/outputs/*
+!server/uploads/.gitkeep
+!server/outputs/.gitkeep
+
+# Cache
+.cache/
+.eslintcache
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp

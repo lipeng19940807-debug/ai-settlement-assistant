@@ -1,0 +1,1178 @@
+<!-- Main App Layout -->
+<div class="flex h-screen w-full bg-background-light dark:bg-background-dark">
+  
+  <!-- Sidebar Navigation -->
+  <aside class="w-64 bg-surface-light dark:bg-surface-dark border-r border-border-light dark:border-border-dark flex flex-col shrink-0 z-20">
+    <div class="h-16 flex items-center px-6 border-b border-border-light dark:border-border-dark">
+      <div class="flex items-center gap-2 text-primary">
+        <span class="material-symbols-outlined text-[28px] filled">local_shipping</span>
+        <span class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">智运结算 AI</span>
+      </div>
+    </div>
+    <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group"
+         [class]="activeMenu() === '概览仪表盘' ? 'bg-primary/10 text-primary font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'">
+        <span class="material-symbols-outlined text-[20px]" [class.filled]="activeMenu() === '概览仪表盘'">dashboard</span>
+        <span class="text-sm">概览仪表盘</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group"
+         [class]="activeMenu() === '源文件接入' ? 'bg-primary/10 text-primary font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'"
+         (click)="goToStep('upload')">
+        <span class="material-symbols-outlined text-[20px]" [class.filled]="activeMenu() === '源文件接入'">upload_file</span>
+        <span class="text-sm">源文件接入</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group"
+         [class]="activeMenu() === 'AI 字段映射' ? 'bg-primary/10 text-primary font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'"
+         (click)="goToStep('mapping')">
+        <span class="material-symbols-outlined text-[20px]" [class.filled]="activeMenu() === 'AI 字段映射'">hub</span>
+        <span class="text-sm">AI 字段映射</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group"
+         [class]="activeMenu() === '对账执行' ? 'bg-primary/10 text-primary font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'"
+         (click)="goToStep('processing')">
+        <span class="material-symbols-outlined text-[20px]" [class.filled]="activeMenu() === '对账执行'">play_circle</span>
+        <span class="text-sm">对账执行</span>
+      </a>
+    </nav>
+    <div class="p-4 border-t border-border-light dark:border-border-dark">
+      <div class="mt-4 flex items-center gap-3 px-3">
+        <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold">JD</div>
+        <div class="flex flex-col">
+          <span class="text-sm font-medium">张经理</span>
+          <span class="text-xs text-slate-500">物流财务部</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden relative bg-slate-50 dark:bg-[#0b1121]">
+    @switch (step()) {
+      <!-- ==================================================================== -->
+      <!-- STEP 1: UPLOAD AND CONFIGURE (New Layout)                            -->
+      <!-- ==================================================================== -->
+      @case ('upload') {
+        <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+          <header class="h-16 flex items-center justify-between px-8 bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark shrink-0 z-10">
+            <div class="flex items-center gap-4">
+              <h1 class="text-xl font-bold text-slate-900 dark:text-white">上传源文件与配置目标模板</h1>
+              <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800">
+                <span class="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-xs font-medium text-primary">步骤 1/4</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="flex items-center justify-center h-9 w-9 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <span class="material-symbols-outlined text-[20px]">help</span>
+              </button>
+            </div>
+          </header>
+
+          <main class="flex-1 flex flex-col overflow-y-auto p-6 lg:p-8 custom-scrollbar">
+            <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col gap-8">
+              <section class="flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                  <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded bg-slate-200 dark:bg-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300">1</span>
+                    上传供应商源文件
+                  </h2>
+                  <span class="text-sm text-slate-500 dark:text-slate-400">支持批量上传 Excel (.xlsx, .xls) 或 CSV 文件</span>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div class="lg:col-span-1 relative min-h-[200px] rounded-xl border-2 border-dashed border-primary/30 bg-surface-light dark:bg-surface-dark hover:border-primary/60 transition-colors group cursor-pointer flex flex-col items-center justify-center p-6 text-center">
+                    <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+                      <span class="material-symbols-outlined text-[32px]">cloud_upload</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">点击或拖拽文件至此</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 max-w-[200px]">支持多文件同时上传，单文件最大 50MB</p>
+                    <button class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                      选择文件
+                    </button>
+                  </div>
+                  <div class="lg:col-span-2 bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark flex flex-col h-full min-h-[280px] overflow-hidden shadow-sm">
+                    <div class="px-4 py-3 border-b border-border-light dark:border-border-dark flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30">
+                      <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">已上传文件列表 ({{ sourceFiles().length }})</span>
+                      <button class="text-xs text-red-500 hover:text-red-600 dark:hover:text-red-400 font-medium">清空列表</button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
+                      @for (file of sourceFiles(); track file.id) {
+                        @switch (file.status) {
+                          @case ('success') {
+                            <div class="relative flex items-center gap-4 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-primary/30 hover:bg-white dark:hover:bg-slate-800 hover:shadow-md hover:shadow-primary/5 transition-all duration-200 group cursor-pointer" (click)="openFilePreview(file)">
+                              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                                <span class="material-symbols-outlined text-[24px]">description</span>
+                              </div>
+                              <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-center mb-1">
+                                  <h4 class="text-sm font-medium text-slate-900 dark:text-white truncate group-hover:text-primary transition-colors">{{ file.name }}</h4>
+                                  <div class="flex items-center">
+                                    <span class="group-hover:hidden text-xs font-bold text-green-600 dark:text-green-400 flex items-center gap-1">
+                                      <span class="material-symbols-outlined text-[14px]">check_circle</span> 解析成功
+                                    </span>
+                                    <span class="hidden group-hover:flex text-xs font-bold text-primary items-center gap-1 bg-primary/10 px-2 py-0.5 rounded-full">
+                                      <span class="material-symbols-outlined text-[16px]">visibility</span> 点击预览明细
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                                  <span>{{ file.size }}</span>
+                                  <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                                  <span>{{ file.rowCount.toLocaleString() }} 行数据</span>
+                                  <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                                  <span>上传于 {{ file.uploadTime }}</span>
+                                </div>
+                              </div>
+                              <button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-red-500 transition-colors z-10">
+                                <span class="material-symbols-outlined text-[18px]">delete</span>
+                              </button>
+                            </div>
+                          }
+                          @case ('parsing') {
+                            <div class="flex items-center gap-4 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-transparent">
+                              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-blue-100 dark:bg-blue-900/30 text-primary">
+                                <span class="material-symbols-outlined text-[24px]">table_chart</span>
+                              </div>
+                              <div class="flex-1 min-w-0">
+                                <div class="flex justify-between mb-1">
+                                  <h4 class="text-sm font-medium text-slate-900 dark:text-white truncate">{{ file.name }}</h4>
+                                  <span class="text-xs font-bold text-primary flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px] animate-spin">progress_activity</span> AI解析中...
+                                  </span>
+                                </div>
+                                <div class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mt-1 mb-1">
+                                  <div class="h-full bg-primary rounded-full w-[45%] animate-pulse"></div>
+                                </div>
+                                <div class="text-xs text-slate-400">
+                                  <span>{{ file.size }}</span>
+                                  <span class="mx-1">•</span>
+                                  <span>上传于 {{ file.uploadTime }}</span>
+                                </div>
+                              </div>
+                              <button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">close</span>
+                              </button>
+                            </div>
+                          }
+                          @case ('error') {
+                            <div class="flex items-center gap-4 p-3 rounded-lg bg-red-50/50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30">
+                              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                                <span class="material-symbols-outlined text-[24px]">error</span>
+                              </div>
+                              <div class="flex-1 min-w-0">
+                                <div class="flex justify-between mb-1">
+                                  <h4 class="text-sm font-medium text-slate-900 dark:text-white truncate">{{ file.name }}</h4>
+                                  <span class="text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px]">warning</span> 解析失败
+                                  </span>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                  <p class="text-xs text-red-500/80 dark:text-red-400/70">{{ file.error }}</p>
+                                  <p class="text-[10px] text-slate-400">上传于 {{ file.uploadTime }}</p>
+                                </div>
+                              </div>
+                              <button class="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 text-red-400 hover:text-red-600 transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">delete</span>
+                              </button>
+                            </div>
+                          }
+                        }
+                      }
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <hr class="border-border-light dark:border-border-dark" />
+              
+              <section class="flex flex-col gap-4 flex-1 min-h-0">
+                  <div class="flex items-center justify-between">
+                      <div class="flex flex-col gap-1">
+                          <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                              <span class="flex h-6 w-6 items-center justify-center rounded bg-slate-200 dark:bg-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300">2</span>
+                              目标模板配置
+                          </h2>
+                          <p class="text-sm text-slate-500 dark:text-slate-400 pl-8">选择已有模板或创建新模板，定义对账输出格式。</p>
+                      </div>
+                  </div>
+                  <div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-hidden flex flex-col flex-1 min-h-0">
+                      <div class="p-6">
+                          <div class="flex flex-col sm:flex-row gap-4">
+                              <label class="flex-1 relative cursor-pointer group">
+                                  <input class="peer sr-only" name="template_source" type="radio" value="existing" [checked]="templateSource() === 'existing'" (change)="templateSource.set('existing')" />
+                                  <div class="h-full p-4 rounded-xl border border-border-light dark:border-slate-700 bg-white dark:bg-slate-800 peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+                                      <div class="flex items-center gap-3 mb-3">
+                                          <div class="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-500 peer-checked:border-primary flex items-center justify-center shrink-0"><div class="w-1.5 h-1.5 bg-primary rounded-full opacity-0 peer-checked:opacity-100"></div></div>
+                                          <span class="font-bold text-slate-700 dark:text-slate-200">选择已有模板</span>
+                                      </div>
+                                      <div class="relative" [class.opacity-50]="templateSource() !== 'existing'">
+                                          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="material-symbols-outlined text-slate-400 text-[18px]">search</span></div>
+                                          <select class="w-full pl-9 pr-8 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded-lg text-sm appearance-none disabled:cursor-not-allowed disabled:text-slate-500" [disabled]="templateSource() !== 'existing'">
+                                              <option>搜索或选择模板...</option>
+                                          </select>
+                                           <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"><span class="material-symbols-outlined text-slate-400 text-[18px]">expand_more</span></div>
+                                      </div>
+                                  </div>
+                              </label>
+                              <label class="flex-1 relative cursor-pointer group">
+                                  <input class="peer sr-only" name="template_source" type="radio" value="new" [checked]="templateSource() === 'new'" (change)="templateSource.set('new')" />
+                                  <div class="h-full p-4 rounded-xl border border-border-light dark:border-slate-700 bg-white dark:bg-slate-800 peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+                                      <div class="flex items-center justify-between mb-3">
+                                          <div class="flex items-center gap-3">
+                                              <div class="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-500 peer-checked:border-primary flex items-center justify-center shrink-0"><div class="w-1.5 h-1.5 bg-primary rounded-full opacity-0 peer-checked:opacity-100"></div></div>
+                                              <span class="font-bold text-slate-900 dark:text-white">新建加工模板</span>
+                                          </div>
+                                          <span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">必填</span>
+                                      </div>
+                                      <div class="relative" [class.opacity-50]="templateSource() !== 'new'">
+                                          <input class="w-full px-3 py-2 bg-white dark:bg-slate-900/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-primary focus:border-primary placeholder-slate-400 disabled:cursor-not-allowed" placeholder="请输入新模板名称 (如: XX承运商对账模版)" type="text" [disabled]="templateSource() !== 'new'" [value]="targetTemplateName()" (input)="targetTemplateName.set($any($event.target).value)" />
+                                      </div>
+                                  </div>
+                              </label>
+                          </div>
+                      </div>
+                      <div class="px-6 py-3 flex flex-wrap items-center justify-between gap-4 border-y border-border-light dark:border-border-dark bg-white dark:bg-surface-dark/50">
+                          <div class="flex items-center gap-2">
+                              <span class="text-sm font-bold text-slate-700 dark:text-slate-300">目标字段定义</span>
+                              <span class="text-xs text-slate-400 border-l border-slate-200 dark:border-slate-700 pl-2">已添加 {{ targetFields().length }} 个字段</span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                              <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                                  <span class="material-symbols-outlined text-[16px]">upload_file</span>
+                                  上传目标模板文件
+                              </button>
+                              <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-xs font-medium text-primary hover:bg-primary/20 transition-colors">
+                                  <span class="material-symbols-outlined text-[16px] filled">edit_square</span>
+                                  手动定义字段
+                              </button>
+                          </div>
+                      </div>
+                      <div class="flex-1 overflow-y-auto custom-scrollbar">
+                          <div class="min-w-[700px]">
+                              <div class="grid grid-cols-12 gap-4 px-6 py-2 border-b border-border-light dark:border-border-dark bg-slate-50 dark:bg-slate-900/70 text-xs font-semibold text-slate-400/80 dark:text-slate-400">
+                                  <div class="col-span-3">目标字段名称 (FIELD NAME)</div>
+                                  <div class="col-span-2">数据类型 (TYPE)</div>
+                                  <div class="col-span-6">备注/示例 (DESCRIPTION)</div>
+                                  <div class="col-span-1 text-right">操作</div>
+                              </div>
+                              <div class="divide-y divide-slate-100 dark:divide-slate-800">
+                                  @for (field of targetFields(); track field.id) {
+                                      <div class="grid grid-cols-12 gap-4 px-6 py-3 items-center hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+                                          <div class="col-span-3 text-sm font-bold text-slate-900 dark:text-white">{{ field.name }}</div>
+                                          <div class="col-span-2">
+                                              <div class="flex items-center gap-2 py-1 w-fit text-xs text-slate-600 dark:text-slate-300">
+                                                  <span class="material-symbols-outlined text-base text-slate-400">{{ field.icon }}</span>
+                                                  @switch(field.type) {
+                                                    @case('String') { 文本 (String) }
+                                                    @case('Date') { 日期 (Date) }
+                                                    @case('Currency') { 金额 (Currency) }
+                                                    @default { {{ field.type }} }
+                                                  }
+                                              </div>
+                                          </div>
+                                          <div class="col-span-6 text-sm text-slate-600 dark:text-slate-400">{{ field.description }}</div>
+                                          <div class="col-span-1 text-right">
+                                              <button class="text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-500 transition-colors" (click)="removeTargetField(field.id)">
+                                                  <span class="material-symbols-outlined text-[20px]">remove_circle</span>
+                                              </button>
+                                          </div>
+                                      </div>
+                                  }
+                                  <button class="w-full py-3 flex items-center justify-center gap-2 text-primary hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors text-sm font-medium" (click)="addNewTargetField()">
+                                      <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                                      <span>添加新字段</span>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+
+            </div>
+          </main>
+
+          <footer class="shrink-0 p-4 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-sm border-t border-border-light dark:border-border-dark flex items-center justify-between z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+            <div class="flex items-center gap-4 text-sm px-4">
+              <span class="text-slate-500 dark:text-slate-400">已就绪源文件: <strong class="text-slate-900 dark:text-white">{{ readySourceFilesCount() }} 个</strong></span>
+              <span class="w-px h-4 bg-slate-300 dark:bg-slate-600"></span>
+              <span class="text-slate-500 dark:text-slate-400">目标字段: <strong class="text-slate-900 dark:text-white">{{ targetFieldsCount() }} 个</strong></span>
+            </div>
+            <button class="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-bold shadow-md shadow-primary/30 flex items-center gap-2 transition-all hover:scale-[1.02] disabled:bg-slate-400 disabled:shadow-none disabled:cursor-not-allowed" 
+                    [disabled]="readySourceFilesCount() === 0 || targetFieldsCount() === 0" (click)="startMapping()">
+              <span>下一步：AI 智能关联</span>
+              <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+            </button>
+          </footer>
+        </div>
+      }
+
+      <!-- ==================================================================== -->
+      <!-- STEP 2: AI FIELD MAPPING                                             -->
+      <!-- ==================================================================== -->
+      @case ('mapping') {
+        <header class="h-16 bg-white dark:bg-surface-dark border-b border-border-light dark:border-border-dark flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
+            <div class="flex items-center gap-4">
+              <h1 class="text-xl font-bold text-slate-900 dark:text-white">AI 智能字段映射</h1>
+              <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800">
+                <span class="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-xs font-medium text-primary">步骤 2/4</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3 bg-gray-100 dark:bg-white/5 px-4 py-2 rounded-full border border-gray-200 dark:border-white/5">
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-xs text-slate-500 dark:text-slate-400">已映射</span>
+                    <span class="text-sm font-bold text-slate-900 dark:text-white">{{ mappedFieldsCount() }}</span>
+                    <span class="text-xs text-slate-400">/ {{ targetFieldsCount() }}</span>
+                  </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 overflow-y-auto custom-scrollbar p-6">
+            @if (isMappingLoading()) {
+                <div class="flex flex-col items-center justify-center h-full text-slate-500">
+                    <span class="material-symbols-outlined text-4xl animate-spin text-primary">progress_activity</span>
+                    <p class="mt-4 text-sm font-medium">AI 正在分析并映射字段...</p>
+                </div>
+            } @else {
+                <div class="max-w-7xl mx-auto w-full flex flex-col gap-4">
+                  <div class="grid grid-cols-12 gap-4 px-6 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      <div class="col-span-3">目标字段 (Target)</div>
+                      <div class="col-span-4 pl-4">已映射源信息 (Mapped Source)</div>
+                      <div class="col-span-2 text-center">AI 匹配度</div>
+                      <div class="col-span-3 text-right pr-2">操作 (Action)</div>
+                  </div>
+                  @for (mapping of fieldMappings(); track mapping.targetFieldId) {
+                      @let targetField = getTargetField(mapping.targetFieldId);
+                      @let sourceInfo = getSourceFieldInfo(mapping);
+                      <div class="group bg-white dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm hover:shadow-md hover:border-primary/30 transition-all p-4 grid grid-cols-12 gap-4 items-center animate-fadeIn">
+                          <div class="col-span-3 flex items-center gap-3">
+                              <div class="h-10 w-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-800">
+                                <span class="material-symbols-outlined text-[22px]">{{ targetField?.icon }}</span>
+                              </div>
+                              <div>
+                                <div class="text-sm font-bold text-slate-900 dark:text-white">{{ targetField?.name }}</div>
+                                <div class="text-xs font-mono text-slate-400 mt-0.5">{{ targetField?.type }}</div>
+                              </div>
+                          </div>
+                          <div class="col-span-4 flex items-center gap-3 pl-2">
+                              <span class="material-symbols-outlined text-slate-300 dark:text-slate-600">arrow_right_alt</span>
+                              <div class="flex-1 min-w-0" (click)="openMappingEditor(mapping)">
+                                @if (sourceInfo) {
+                                  <div class="bg-gray-50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 flex items-center justify-between cursor-pointer hover:border-primary/50 transition-colors group/source"
+                                       [class.border-amber-200]="mapping.matchConfidence < 80"
+                                       [class.dark:border-amber-800]="mapping.matchConfidence < 80"
+                                       [class.bg-amber-50]="mapping.matchConfidence < 80"
+                                       [class.dark:bg-amber-900/10]="mapping.matchConfidence < 80">
+                                      <div class="min-w-0">
+                                          <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-0.5">
+                                            <span class="truncate max-w-[120px]">{{ sourceInfo.file.name }}</span>
+                                          </div>
+                                          <div class="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{{ sourceInfo.field.name }}</div>
+                                      </div>
+                                      <span class="material-symbols-outlined text-slate-400 text-sm group-hover/source:text-primary">expand_more</span>
+                                  </div>
+                                } @else {
+                                  <button class="w-full flex items-center justify-center px-3 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-primary hover:text-primary transition-colors text-slate-400 gap-2 h-[58px]">
+                                    <span class="material-symbols-outlined text-sm">add_link</span>
+                                    <span class="text-sm">点击选择源字段</span>
+                                  </button>
+                                }
+                              </div>
+                          </div>
+                          <div class="col-span-2 flex justify-center">
+                            @if (sourceInfo) {
+                                @if (mapping.matchConfidence >= 90) {
+                                  <div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800">
+                                    <span class="material-symbols-outlined text-[16px] text-green-600 filled">smart_toy</span>
+                                    <span class="text-xs font-bold text-green-700 dark:text-green-400">{{ mapping.matchConfidence }}% 匹配</span>
+                                  </div>
+                                } @else if (mapping.matchConfidence >= 80) {
+                                  <div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800">
+                                      <span class="text-xs font-bold text-green-700 dark:text-green-400">{{ mapping.matchConfidence }}% 匹配</span>
+                                  </div>
+                                } @else {
+                                  <div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800">
+                                      <span class="text-xs font-bold text-amber-700 dark:text-amber-400">{{ mapping.matchConfidence }}% 匹配</span>
+                                  </div>
+                                }
+                            } @else {
+                               <span class="text-xs text-slate-400">-</span>
+                            }
+                          </div>
+                          <div class="col-span-3 flex justify-end">
+                            @if (mapping.processingRule) {
+                                <div (click)="openRuleEditor(mapping)" class="w-full flex items-center justify-between gap-2 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-lg p-2.5 group/edit hover:border-indigo-300 dark:hover:border-indigo-600 transition-colors cursor-pointer">
+                                    <div class="flex-1 min-w-0">
+                                      <p class="text-xs text-indigo-900 dark:text-indigo-100 leading-relaxed truncate">
+                                        <span class="font-bold text-primary mr-1">[AI简述]</span>
+                                        {{ mapping.processingRule }}
+                                      </p>
+                                    </div>
+                                    <div class="shrink-0 flex items-center justify-center w-6 h-6 rounded hover:bg-white/50 dark:hover:bg-black/20 text-indigo-400 hover:text-primary transition-colors">
+                                      <span class="material-symbols-outlined text-[16px]">edit_square</span>
+                                    </div>
+                                </div>
+                            } @else {
+                                <button (click)="openRuleEditor(mapping)" class="flex items-center justify-center gap-2 w-full max-w-[160px] h-10 rounded-lg bg-primary hover:bg-primary-hover text-white font-medium shadow-sm shadow-blue-500/20 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:bg-slate-300 disabled:shadow-none disabled:cursor-not-allowed" [disabled]="!sourceInfo">
+                                    <span class="material-symbols-outlined text-[18px]">tune</span>
+                                    <span>设置加工规则</span>
+                                </button>
+                            }
+                          </div>
+                      </div>
+                  }
+                </div>
+                <div class="h-12"></div>
+            }
+        </main>
+        <footer class="h-16 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-sm border-t border-border-light dark:border-border-dark flex items-center justify-between px-8 shrink-0 z-20">
+            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+              <span class="material-symbols-outlined text-[18px] text-amber-500">info</span>
+              <span>建议检查低匹配度的字段映射</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <button (click)="goToStep('upload')" class="px-5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-slate-700 dark:text-white font-medium hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                返回上一步
+              </button>
+              <button (click)="goToStep('summary')" class="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-bold shadow-lg transition-all transform hover:scale-[1.02] active:scale-95">
+                <span>确认映射</span>
+                <span class="material-symbols-outlined text-sm">check</span>
+              </button>
+            </div>
+        </footer>
+      }
+      
+      <!-- ==================================================================== -->
+      <!-- STEP 3: RULE EDITOR (New Layout)                                     -->
+      <!-- ==================================================================== -->
+      @case('ruleEditor') {
+        @if (selectedMappingForRules(); as mapping) {
+          @let targetField = getTargetField(mapping.targetFieldId);
+          <div class="flex-1 flex flex-col min-w-0 h-full">
+            <header class="h-16 border-b border-gray-200 dark:border-gray-800 bg-surface-light/80 dark:bg-background-dark/80 backdrop-blur px-6 flex items-center justify-between shrink-0 z-10">
+              <div class="flex items-center gap-4">
+                <button (click)="step.set('mapping')" class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 transition-colors">
+                  <span class="material-symbols-outlined">arrow_back</span>
+                </button>
+                <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">字段加工逻辑配置</h1>
+                <div class="h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
+                <span class="px-2 py-0.5 rounded text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-800/50">
+                  Target: {{ targetField?.name }}
+                </span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/5 px-3 py-1.5 rounded-lg border border-transparent dark:border-white/5">
+                  <span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+                  AI 助手在线
+                </div>
+                <button class="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
+                  <span class="material-symbols-outlined">notifications</span>
+                </button>
+              </div>
+            </header>
+            <div class="flex-1 flex overflow-hidden">
+              <aside class="w-72 xl:w-80 bg-surface-light dark:bg-surface-dark border-r border-gray-200 dark:border-gray-800 flex flex-col shrink-0">
+                <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between h-14 shrink-0">
+                  <h2 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-slate-400 text-lg">dataset</span>
+                    源数据参考
+                  </h2>
+                  <span class="text-[10px] font-mono bg-slate-100 dark:bg-white/10 px-2 py-0.5 rounded text-slate-500 border border-gray-200 dark:border-gray-700">Sample #1</span>
+                </div>
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-4">
+                  @if(getSourceFieldInfo(mapping); as sourceInfo) {
+                    @for (field of sourceInfo.file.sheets![0].fields; track field.id) {
+                      <div class="group relative">
+                        <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                          <span class="font-medium group-hover:text-primary transition-colors">{{ field.name }}</span>
+                          <span class="text-[10px] bg-slate-50 dark:bg-white/5 px-1 rounded">{{ field.type }}</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-mono text-slate-700 dark:text-slate-300 break-all group-hover:border-primary/50 group-hover:bg-primary/5 transition-all">
+                          {{ field.sample }}
+                        </div>
+                      </div>
+                    }
+                  }
+                </div>
+              </aside>
+              <main class="flex-1 flex flex-col min-w-0 bg-gray-50/50 dark:bg-black/10">
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-5">
+                  <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary">
+                    <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-xl filled">auto_awesome</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white">AI 规则交互</span>
+                      </div>
+                      <span class="text-xs text-slate-400">支持自然语言描述</span>
+                    </div>
+                    <div class="p-4">
+                      <textarea class="w-full bg-slate-50/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 rounded-lg p-3 text-sm focus:ring-0 focus:border-transparent transition-all resize-none h-24 placeholder:text-slate-400 dark:text-white leading-relaxed" 
+                                placeholder="请描述如何加工当前字段... &#10;例如：将运单号(Tracking No)和子单号用横杠连接，并转为大写。"
+                                [value]="ruleDescription()"
+                                (input)="ruleDescription.set($any($event.target).value)"></textarea>
+                      <div class="flex justify-between items-center mt-3">
+                        <div class="flex gap-1">
+                          <button class="p-2 text-slate-400 hover:text-primary transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-white/5" title="语音输入">
+                            <span class="material-symbols-outlined text-lg">mic</span>
+                          </button>
+                          <button class="p-2 text-slate-400 hover:text-primary transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-white/5" title="历史记录">
+                            <span class="material-symbols-outlined text-lg">history</span>
+                          </button>
+                        </div>
+                        <button class="bg-primary hover:bg-primary-hover text-white px-5 py-2 rounded-lg text-sm font-bold transition-all active:scale-95 shadow-lg shadow-primary/20 flex items-center gap-2 disabled:bg-slate-400 disabled:shadow-none"
+                                [disabled]="geminiService.isGenerating() || !ruleDescription()" (click)="generateCode()">
+                          @if(geminiService.isGenerating()) {
+                            <span class="material-symbols-outlined text-lg animate-spin">progress_activity</span>
+                            <span>生成中...</span>
+                          } @else {
+                            <span class="material-symbols-outlined text-lg">send</span>
+                            <span>生成代码</span>
+                          }
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  @if(mapping.generatedCode) {
+                    <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 min-h-[250px] animate-fadeIn">
+                      <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-slate-50/50 dark:bg-white/5 rounded-t-xl">
+                        <span class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                          <span class="material-symbols-outlined text-purple-500 text-lg">code</span>
+                          生成的 Python 逻辑
+                        </span>
+                        <div class="flex gap-2">
+                          <button class="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-slate-500 hover:text-primary rounded hover:bg-white dark:hover:bg-white/10 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-600">
+                            <span class="material-symbols-outlined text-sm">content_copy</span> 复制
+                          </button>
+                        </div>
+                      </div>
+                      <div class="flex-1 bg-[#1e1e1e] p-5 font-mono text-sm text-slate-300 overflow-auto custom-scrollbar relative group">
+                        <pre class="relative z-10"><code>{{ mapping.generatedCode }}</code></pre>
+                      </div>
+                    </div>
+                  }
+                  @if(rulePreviewResult()) {
+                    <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden shrink-0 animate-fadeIn">
+                      <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-gradient-to-r from-green-50/50 to-transparent dark:from-green-900/10">
+                        <span class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                          <span class="material-symbols-outlined text-green-600 text-lg">preview</span>
+                          加工后预览
+                        </span>
+                        <span class="text-[10px] font-bold text-green-700 bg-green-100 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800 flex items-center gap-1">
+                          <span class="material-symbols-outlined text-xs">check</span> 校验通过
+                        </span>
+                      </div>
+                      <div class="p-6 flex items-center gap-8">
+                        <div class="flex-1">
+                          <label class="text-xs font-medium text-slate-500 mb-2 block uppercase tracking-wide">输出结果 (Result)</label>
+                          <div class="text-2xl font-mono font-bold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-3">
+                            {{ rulePreviewResult() }}
+                            <span class="text-xs font-normal text-slate-400 bg-slate-100 dark:bg-white/10 px-2 py-1 rounded border border-gray-200 dark:border-gray-700">Len: {{ rulePreviewResult()?.length }}</span>
+                          </div>
+                        </div>
+                        <div class="w-px h-12 bg-gray-100 dark:bg-gray-700"></div>
+                        <div class="flex-1">
+                          <label class="text-xs font-medium text-slate-500 mb-2 block uppercase tracking-wide">数据类型</label>
+                          <div class="text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            String (Text)
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-800 bg-surface-light dark:bg-surface-dark flex items-center justify-between shrink-0 z-10">
+                  <div class="text-xs text-slate-400">
+                    <span class="font-medium text-slate-600 dark:text-slate-300">Tips:</span> 此操作仅保存当前字段的配置，不会立即执行全量数据。
+                  </div>
+                  <div class="flex gap-3">
+                    <button (click)="step.set('mapping')" class="px-5 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors focus:ring-2 focus:ring-gray-200">
+                      取消
+                    </button>
+                    <button (click)="saveRule()" class="px-5 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-bold shadow-lg shadow-primary/25 transition-all flex items-center gap-2 active:scale-95 focus:ring-2 focus:ring-primary/40">
+                      <span class="material-symbols-outlined text-lg">save_as</span>
+                      保存当前字段逻辑
+                    </button>
+                  </div>
+                </div>
+              </main>
+              <aside class="w-72 xl:w-80 bg-surface-light dark:bg-surface-dark border-l border-gray-200 dark:border-gray-800 flex flex-col shrink-0">
+                <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-800 h-14 shrink-0 flex items-center">
+                  <h2 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-slate-400 text-lg">info</span>
+                    字段上下文
+                  </h2>
+                </div>
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-8">
+                  <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                      <span class="w-1 h-3 bg-purple-500 rounded-full"></span>
+                      目标定义
+                    </h3>
+                    <div class="space-y-5">
+                      <div class="group">
+                        <label class="block text-xs text-slate-500 mb-1.5">字段名称 (Field Name)</label>
+                        <div class="font-mono font-medium text-slate-900 dark:text-white text-sm bg-slate-50 dark:bg-white/5 p-2 rounded border border-gray-200 dark:border-gray-700">{{ targetField?.name }}</div>
+                      </div>
+                      @if(targetField?.regex) {
+                        <div class="group">
+                          <label class="block text-xs text-slate-500 mb-1.5">格式约束 (Regex)</label>
+                          <div class="flex items-center gap-2">
+                            <code class="px-2 py-1.5 rounded bg-slate-100 dark:bg-white/5 text-xs font-mono text-pink-600 dark:text-pink-300 border border-gray-200 dark:border-gray-700 w-full break-all">{{ targetField.regex }}</code>
+                          </div>
+                        </div>
+                      }
+                      <div class="grid grid-cols-2 gap-4">
+                        <div class="group">
+                          <label class="block text-xs text-slate-500 mb-1.5">必填项</label>
+                          @if(targetField?.required) {
+                            <div class="flex items-center gap-1.5 text-sm text-slate-700 dark:text-slate-300 font-medium">
+                              <span class="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                              Required
+                            </div>
+                          } @else {
+                             <div class="flex items-center gap-1.5 text-sm text-slate-700 dark:text-slate-300 font-medium">
+                              <span class="material-symbols-outlined text-slate-400 text-lg">cancel</span>
+                              Optional
+                            </div>
+                          }
+                        </div>
+                        <div class="group">
+                          <label class="block text-xs text-slate-500 mb-1.5">唯一性</label>
+                          @if(targetField?.unique) {
+                            <div class="flex items-center gap-1.5 text-sm text-slate-700 dark:text-slate-300 font-medium">
+                              <span class="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                              Unique
+                            </div>
+                           } @else {
+                             <div class="flex items-center gap-1.5 text-sm text-slate-700 dark:text-slate-300 font-medium">
+                              <span class="material-symbols-outlined text-slate-400 text-lg">cancel</span>
+                              Not Unique
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @if(targetField?.businessRule) {
+                    <div class="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent w-full"></div>
+                    <div>
+                      <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                        <span class="w-1 h-3 bg-blue-500 rounded-full"></span>
+                        业务规则备注
+                      </h3>
+                      <div class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed bg-blue-50 dark:bg-blue-900/10 p-3 rounded-lg border border-blue-100 dark:border-blue-800/30 relative">
+                        <span class="material-symbols-outlined text-blue-400 absolute -top-2 -right-2 bg-surface-light dark:bg-surface-dark rounded-full">help</span>
+                        {{ targetField.businessRule }}
+                      </div>
+                    </div>
+                  }
+                </div>
+              </aside>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- ==================================================================== -->
+      <!-- STEP 4: SUMMARY                                                      -->
+      <!-- ==================================================================== -->
+      @case('summary') {
+        <header class="h-16 bg-white dark:bg-surface-dark border-b border-border-light dark:border-border-dark flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
+            <div class="flex items-center gap-4">
+              <h1 class="text-xl font-bold text-slate-900 dark:text-white">执行前摘要与确认</h1>
+              <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800">
+                <span class="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-xs font-medium text-primary">步骤 3/4</span>
+              </div>
+            </div>
+        </header>
+        <main class="flex-1 flex overflow-y-auto custom-scrollbar p-6 lg:p-8">
+            <div class="max-w-6xl mx-auto w-full flex-1 grid grid-cols-1 lg:grid-cols-5 gap-8">
+              <div class="lg:col-span-3 flex flex-col gap-6">
+                  <h3 class="text-lg font-bold text-slate-800 dark:text-white pb-2 border-b border-border-light dark:border-border-dark">配置总览</h3>
+                  <div class="bg-white dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm p-5">
+                      <h4 class="font-semibold text-slate-500 dark:text-slate-400 text-sm mb-3">源文件</h4>
+                      <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-3xl text-primary">source_notes</span>
+                        <span class="text-lg font-bold">{{ readySourceFilesCount() }}</span>
+                        <span class="text-slate-500">个文件待处理</span>
+                      </div>
+                  </div>
+                  <div class="bg-white dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm p-5">
+                      <h4 class="font-semibold text-slate-500 dark:text-slate-400 text-sm mb-3">目标模板</h4>
+                      <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-3xl text-green-500">assignment_turned_in</span>
+                        <span class="text-lg font-bold">{{ targetTemplateName() }}</span>
+                      </div>
+                  </div>
+                  <div class="bg-white dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm flex-1 min-h-0 flex flex-col">
+                      <div class="p-5 border-b border-border-light dark:border-border-dark">
+                        <h4 class="font-semibold text-slate-500 dark:text-slate-400 text-sm">字段映射关系 ({{ mappedFieldsCount() }}/{{ targetFieldsCount() }})</h4>
+                      </div>
+                      <div class="p-3 flex-1 overflow-y-auto custom-scrollbar">
+                        <ul class="space-y-2">
+                          @for(mapping of fieldMappings(); track mapping.targetFieldId) {
+                            @let targetField = getTargetField(mapping.targetFieldId);
+                            @let sourceInfo = getSourceFieldInfo(mapping);
+                            <li class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                              <div class="flex items-center gap-2">
+                                <span class="font-semibold text-slate-700 dark:text-slate-200 text-sm">{{ targetField?.name }}</span>
+                                @if(mapping.processingRule) {
+                                  <span class="material-symbols-outlined text-xs text-primary filled" title="包含加工逻辑">tune</span>
+                                }
+                              </div>
+                              <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-slate-400 text-lg">arrow_left_alt</span>
+                                @if(sourceInfo) {
+                                  <span class="text-sm text-slate-500 dark:text-slate-400 text-right truncate" title="{{sourceInfo.file.name}} / {{sourceInfo.field.name}}">{{ sourceInfo.field.name }}</span>
+                                } @else {
+                                  <span class="text-sm text-amber-500">未映射</span>
+                                }
+                              </div>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="lg:col-span-2">
+                 <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 rounded-xl p-5 sticky top-8">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-4">
+                      <span class="material-symbols-outlined text-primary text-xl filled">task_alt</span>
+                      AI 最终检查
+                    </h3>
+                    <ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+                      <li class="flex items-start gap-2.5">
+                        <span class="material-symbols-outlined text-green-500 text-base mt-0.5">check_circle</span>
+                        <span>所有目标字段均已完成映射。</span>
+                      </li>
+                       <li class="flex items-start gap-2.5">
+                        <span class="material-symbols-outlined text-green-500 text-base mt-0.5">check_circle</span>
+                        <span>所有源文件均已成功解析。</span>
+                      </li>
+                       <li class="flex items-start gap-2.5">
+                        <span class="material-symbols-outlined text-amber-500 text-base mt-0.5">warning</span>
+                        <span><strong>2</strong> 个字段的匹配度低于80%，请确认映射关系是否准确。</span>
+                      </li>
+                       <li class="flex items-start gap-2.5">
+                        <span class="material-symbols-outlined text-green-500 text-base mt-0.5">check_circle</span>
+                        <span><strong>1</strong> 个字段已配置数据加工逻辑。</span>
+                      </li>
+                    </ul>
+                    <div class="mt-8 pt-6 border-t border-blue-200 dark:border-blue-800/50">
+                        <label for="confirm-checkbox" class="flex items-start gap-3 cursor-pointer group">
+                          <input id="confirm-checkbox" type="checkbox" class="mt-1 shrink-0 w-4 h-4 text-primary bg-slate-100 border-slate-300 rounded focus:ring-primary dark:bg-slate-900 dark:border-slate-600 dark:focus:ring-primary" (change)="summaryConfirmed.set($any($event.target).checked)">
+                          <span class="text-sm text-slate-600 dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-white transition-colors">我已确认以上配置无误，可以开始执行对账。</span>
+                        </label>
+                    </div>
+                 </div>
+              </div>
+            </div>
+        </main>
+        <footer class="h-16 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-sm border-t border-border-light dark:border-border-dark flex items-center justify-between px-8 shrink-0 z-20">
+            <div></div>
+            <div class="flex items-center gap-4">
+              <button (click)="goToStep('mapping')" class="px-5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-slate-700 dark:text-white font-medium hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                返回上一步
+              </button>
+              <button (click)="startProcessing()" [disabled]="!summaryConfirmed()" class="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary hover:bg-primary-hover text-white font-bold shadow-lg shadow-primary/30 transition-all transform hover:scale-[1.02] active:scale-95 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:shadow-none disabled:cursor-not-allowed">
+                <span>开始执行对账</span>
+                <span class="material-symbols-outlined text-sm">play_arrow</span>
+              </button>
+            </div>
+        </footer>
+      }
+
+      <!-- ==================================================================== -->
+      <!-- STEP 5: PROCESSING                                                   -->
+      <!-- ==================================================================== -->
+      @case('processing') {
+        <div class="flex-1 flex flex-col h-full overflow-hidden relative bg-[#0b1121] text-slate-300">
+           <header class="h-16 flex items-center justify-between px-6 bg-[#111921]/80 backdrop-blur-sm border-b border-border-dark shrink-0 z-20">
+              <div class="flex items-center gap-4">
+                <button (click)="goToStep('summary')" class="p-1.5 rounded-full text-slate-300 hover:bg-white/10 transition-colors">
+                  <span class="material-symbols-outlined text-xl">arrow_back</span>
+                </button>
+                <h1 class="text-xl font-bold text-white">AI 加工执行与结果预览</h1>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="text-sm text-slate-400">上次保存: 刚刚</div>
+                <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white font-bold shadow-md shadow-primary/20 transition-all transform hover:scale-[1.02] active:scale-95">
+                  <span class="material-symbols-outlined text-base">download</span>
+                  <span>导出加工结果 (Excel)</span>
+                </button>
+              </div>
+          </header>
+
+          <div class="flex-1 flex overflow-hidden">
+            <main class="flex-1 flex flex-col overflow-hidden p-6 gap-6">
+                <!-- Processing Progress -->
+                <div class="p-5 rounded-xl bg-[#1d2630] border border-slate-700/50">
+                  <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center gap-3">
+                        <span class="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></span>
+                        <span class="font-bold text-white">AI 智能加工进行中...</span>
+                        <span class="text-sm text-slate-400">预计剩余 12 秒</span>
+                      </div>
+                      <span class="text-lg font-bold text-white">{{ processingProgress() }}%</span>
+                  </div>
+                  <div class="w-full h-2 bg-slate-700 rounded-full overflow-hidden mb-2">
+                    <div class="h-full bg-primary rounded-full transition-all duration-300" [style.width.%]="processingProgress()"></div>
+                  </div>
+                  <div class="flex items-center justify-between text-xs text-slate-400">
+                    <span>正在处理第 <strong>8,500</strong> / 12,405 条数据</span>
+                    <span>批次 ID: #PROC-20231024-09</span>
+                  </div>
+                </div>
+
+                <!-- Results Table -->
+                <div class="flex-1 flex flex-col overflow-hidden rounded-xl bg-[#1d2630] border border-slate-700/50">
+                    <div class="px-5 py-3 border-b border-slate-700/50 flex items-center justify-between">
+                        <h3 class="font-bold text-white">加工结果预览 (Sheet1)</h3>
+                        <div class="flex items-center gap-2">
+                          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                            <span class="material-symbols-outlined text-xl">search</span>
+                          </button>
+                           <button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                            <span class="material-symbols-outlined text-xl">filter_list</span>
+                          </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto custom-scrollbar">
+                      <table class="w-full text-sm">
+                        <thead class="sticky top-0 bg-[#1d2630]/80 backdrop-blur-sm">
+                          <tr class="border-b border-slate-700/50">
+                            <th class="p-3 text-left font-semibold text-slate-400 w-12">#</th>
+                            <th class="p-3 text-left font-semibold text-slate-400">原始单号 (SOURCE)</th>
+                            <th class="p-3 text-left font-semibold text-slate-400">标准化日期 (DATE)</th>
+                            <th class="p-3 text-left font-semibold text-slate-400">归一化费用项 (FEE TYPE)</th>
+                            <th class="p-3 text-left font-semibold text-slate-400">提取金额 (AMT)</th>
+                            <th class="p-3 text-left font-semibold text-slate-400">校验状态</th>
+                            <th class="p-3 text-left font-semibold text-slate-400">操作</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                          @if(processingResults().length === 0) {
+                            @for(_ of [1,2,3,4,5,6]; track $index) {
+                              <tr class="animate-pulse">
+                                <td class="p-4"><div class="h-4 bg-slate-700 rounded w-1/2"></div></td>
+                                <td class="p-4"><div class="h-4 bg-slate-700 rounded"></div></td>
+                                <td class="p-4"><div class="h-4 bg-slate-700 rounded"></div></td>
+                                <td class="p-4"><div class="h-4 bg-slate-700 rounded"></div></td>
+                                <td class="p-4"><div class="h-4 bg-slate-700 rounded"></div></td>
+                                <td class="p-4"><div class="h-4 bg-slate-700 rounded"></div></td>
+                                <td class="p-4"><div class="h-4 bg-slate-700 rounded w-3/4"></div></td>
+                              </tr>
+                            }
+                          } @else {
+                             @for(row of processingResults(); track row.id) {
+                                <tr class="hover:bg-slate-700/20" [class.bg-red-500/10]="row.status === 'ERR'" [class.bg-amber-500/10]="row.status === 'WARN'">
+                                  <td class="p-3 font-mono text-slate-400">{{ row.id }}</td>
+                                  <td class="p-3 font-mono text-white">{{ row.sourceId }}</td>
+                                  <td class="p-3 font-mono">{{ row.standardDate }}</td>
+                                  <td class="p-3">{{ row.feeType }}</td>
+                                  <td class="p-3 font-mono">{{ row.amount.toFixed(2) }}</td>
+                                  <td class="p-3">
+                                    @switch (row.status) {
+                                      @case('PASS') {
+                                        <span class="px-2 py-0.5 text-xs font-bold text-green-300 bg-green-500/20 rounded-full">PASS</span>
+                                      }
+                                      @case('WARN') {
+                                        <span class="px-2 py-0.5 text-xs font-bold text-amber-300 bg-amber-500/20 rounded-full flex items-center gap-1 w-fit">
+                                          <span class="material-symbols-outlined text-xs">warning</span>
+                                          WARN
+                                        </span>
+                                      }
+                                       @case('ERR') {
+                                        <span class="px-2 py-0.5 text-xs font-bold text-red-300 bg-red-500/20 rounded-full flex items-center gap-1 w-fit">
+                                          <span class="material-symbols-outlined text-xs">error</span>
+                                          ERR
+                                        </span>
+                                      }
+                                    }
+                                  </td>
+                                  <td class="p-3">
+                                    <button class="text-sm font-bold text-primary hover:underline">对比</button>
+                                  </td>
+                                </tr>
+                             }
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+
+            </main>
+            <aside class="w-96 shrink-0 border-l border-slate-700/50 flex flex-col">
+              <div class="p-5 border-b border-slate-700/50">
+                 <h3 class="font-bold text-white text-lg flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl filled">verified</span>AI 质量审计</h3>
+                 <p class="text-sm text-slate-400 mt-1">基于预览规则对加工结果进行实时审计。</p>
+              </div>
+              <div class="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar">
+                  <div class="grid grid-cols-2 gap-4">
+                      <div class="p-4 rounded-lg bg-[#1d2630] border border-slate-700/50 text-center">
+                        <div class="text-3xl font-bold text-white">99.2%</div>
+                        <div class="text-xs text-slate-400 mt-1">字段填充率</div>
+                      </div>
+                      <div class="p-4 rounded-lg bg-[#1d2630] border border-slate-700/50 text-center">
+                        <div class="text-3xl font-bold text-green-400">95.4%</div>
+                        <div class="text-xs text-slate-400 mt-1">逻辑通过率</div>
+                      </div>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-semibold text-slate-400 mb-2">审计发现 (2)</h4>
+                    <div class="space-y-3">
+                      <div class="p-4 rounded-lg bg-amber-900/30 border border-amber-700/50">
+                        <h5 class="font-bold text-amber-300 flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-base">warning</span>格式异常</h5>
+                        <p class="text-sm text-slate-300 leading-relaxed">行 5 的“发货日期”字段未能正确转换为标准 YYYY-MM-DD 格式。</p>
+                        <button class="text-sm font-bold text-primary hover:underline mt-2">定位到该行</button>
+                      </div>
+                       <div class="p-4 rounded-lg bg-blue-900/30 border border-blue-700/50">
+                        <h5 class="font-bold text-blue-300 flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-base">info</span>缺失映射</h5>
+                        <p class="text-sm text-slate-300 leading-relaxed">行 3 出现未知的费用类型“夜间派送费”，AI已根据上下文标记为 Warning。</p>
+                        <button class="text-sm font-bold text-primary hover:underline mt-2">查看映射规则</button>
+                      </div>
+                    </div>
+                  </div>
+                   <div>
+                    <h4 class="text-sm font-semibold text-slate-400 mb-2">AI 建议</h4>
+                    <div class="p-4 rounded-lg bg-slate-700/30 text-sm text-slate-300 leading-relaxed flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-lg mt-0.5">lightbulb</span>
+                        <span>建议在导出前修复所有红色异常项，以确保对账准确性。</span>
+                    </div>
+                  </div>
+              </div>
+              <div class="p-5 border-t border-slate-700/50 shrink-0">
+                <button class="w-full py-3 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined">description</span>
+                  生成详细审计报告
+                </button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      }
+
+      @default {
+        <div class="p-8">
+            <h1 class="text-2xl font-bold">欢迎使用智运结算 AI</h1>
+            <p class="text-slate-500 mt-2">请从左侧导航开始新的结算任务。</p>
+        </div>
+      }
+    }
+
+  </div>
+</div>
+
+<!-- File Preview Modal -->
+@if(showFilePreviewModal() && selectedFileForPreview(); as file) {
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center p-4 animate-fadeIn" (click)="closeFilePreviewModal()">
+    <div class="bg-surface-light dark:bg-surface-dark rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col shadow-2xl animate-slideIn" (click)="$event.stopPropagation()">
+      <header class="h-16 flex items-center justify-between px-6 border-b border-border-light dark:border-border-dark shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary text-xl">description</span>
+            <h2 class="text-lg font-bold">{{ file.name }}</h2>
+          </div>
+          <button (click)="closeFilePreviewModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+      </header>
+      <div class="flex-1 flex overflow-hidden">
+        <aside class="w-[380px] shrink-0 border-r border-border-light dark:border-border-dark flex flex-col">
+           <div class="p-5 border-b border-border-light dark:border-border-dark">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary filled text-lg">smart_toy</span> AI 文件摘要</h3>
+              @if(isSummaryLoading()) {
+                <div class="space-y-4">
+                  @for(_ of [1,2,3,4]; track $index) {
+                     <div class="h-8 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></div>
+                  }
+                </div>
+              } @else if(aiFileSummary(); as summary) {
+                <div class="space-y-3 text-sm">
+                   <div class="flex justify-between items-center"><span class="text-slate-500">供应商</span><strong class="text-slate-800 dark:text-slate-200">{{ summary.provider }}</strong></div>
+                   <div class="flex justify-between items-center"><span class="text-slate-500">账期</span><strong class="text-slate-800 dark:text-slate-200">{{ summary.period }}</strong></div>
+                   <div class="flex justify-between items-center"><span class="text-slate-500">币种</span><strong class="text-slate-800 dark:text-slate-200">{{ summary.currency }}</strong></div>
+                   <div class="p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/50 text-amber-800 dark:text-amber-300 text-xs leading-relaxed">
+                     <strong class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-sm">lightbulb</span> AI 异常提示</strong>
+                     {{ summary.anomalies }}
+                   </div>
+                </div>
+              }
+           </div>
+           <div class="p-5 flex-1 overflow-y-auto">
+             <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">data_object</span> AI 识别字段</h3>
+             <div class="flex flex-wrap gap-2">
+                @for(field of aiExtractedFields(); track field.name) {
+                  <span class="px-2.5 py-1 rounded-full text-xs font-medium" [class]="'bg-' + field.color + '-100 dark:bg-' + field.color + '-900/30 text-' + field.color + '-700 dark:text-' + field.color + '-300'">{{ field.name }}</span>
+                }
+             </div>
+           </div>
+        </aside>
+        <main class="flex-1 flex flex-col overflow-hidden">
+          <div class="px-5 py-3 border-b border-border-light dark:border-border-dark flex items-center justify-between">
+            <div class="text-sm font-semibold">数据预览 (前30行)</div>
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span class="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">{{ file.sheets![0].name }}</span>
+            </div>
+          </div>
+          <div class="flex-1 overflow-auto custom-scrollbar">
+            <table class="w-full text-sm text-left">
+                <thead class="sticky top-0 bg-slate-50 dark:bg-slate-800/50 backdrop-blur-sm">
+                    <tr>
+                      @for(header of previewTableHeaders(); track header.key) {
+                        <th class="p-3 font-semibold text-slate-500 dark:text-slate-400 whitespace-nowrap">{{ header.label }}</th>
+                      }
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                  @for(row of previewTableData(); track row.index) {
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                      @for(header of previewTableHeaders(); track header.key) {
+                        <td class="p-3 whitespace-nowrap text-slate-700 dark:text-slate-300" [class.font-mono]="header.key !== 'index'">{{ row[header.key] }}</td>
+                      }
+                    </tr>
+                  }
+                </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Mapping Editor Modal -->
+@if(showMappingModal() && editingMapping(); as mapping) {
+  @let targetField = getTargetField(mapping.targetFieldId);
+  @let currentSourceInfo = getSourceFieldInfo(mapping);
+
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center p-4" (click)="closeMappingEditor()">
+    <div class="bg-slate-800 rounded-xl w-full max-w-4xl max-h-[80vh] flex flex-col shadow-2xl border border-slate-700 text-slate-300 animate-fadeIn" (click)="$event.stopPropagation()">
+      <header class="h-16 flex items-center justify-between px-6 border-b border-slate-700 shrink-0">
+          <h2 class="text-lg font-bold text-white">修改源字段关联</h2>
+          <button (click)="closeMappingEditor()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-700 transition-colors">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+      </header>
+
+      <div class="p-6 border-b border-slate-700 bg-slate-900/50 text-sm space-y-2">
+        <div class="flex items-center gap-4">
+          <span class="text-slate-400">当前目标字段:</span>
+          <span class="px-2 py-0.5 font-mono rounded bg-purple-900/50 text-purple-300 border border-purple-800/50 flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">{{ targetField?.icon }}</span>
+            {{ targetField?.name }}
+          </span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-slate-400">当前关联:</span>
+          @if(currentSourceInfo) {
+            <span class="font-semibold text-white">{{ currentSourceInfo.file.name }} - {{ currentSourceInfo.field.name }}</span>
+          } @else {
+            <span class="text-amber-400">未关联</span>
+          }
+        </div>
+      </div>
+      
+      <div class="flex-1 flex overflow-hidden min-h-0">
+        <aside class="w-64 shrink-0 border-r border-slate-700 flex flex-col">
+           <div class="p-3 border-b border-slate-700">
+             <h3 class="text-xs font-semibold text-slate-400 uppercase">源文件选择</h3>
+           </div>
+           <div class="flex-1 overflow-y-auto custom-scrollbar p-2">
+            @for(file of readySourceFiles(); track file.id) {
+              <button class="w-full text-left p-3 rounded-md flex flex-col gap-1 transition-colors"
+                      [class]="modalSelectedFileId() === file.id ? 'bg-primary/10 text-primary' : 'hover:bg-slate-700/50'"
+                      (click)="modalSelectedFileId.set(file.id)">
+                <div class="flex items-center gap-2 font-medium text-sm">
+                  <span class="material-symbols-outlined text-base">description</span>
+                  <span>{{ file.name }}</span>
+                </div>
+                <div class="text-xs pl-6" [class]="modalSelectedFileId() === file.id ? 'text-primary/80' : 'text-slate-400'">{{ file.sheets?.length }} Sheets • {{ file.size }}</div>
+              </button>
+            }
+           </div>
+        </aside>
+        <main class="flex-1 flex flex-col overflow-hidden">
+          <div class="p-4 border-b border-slate-700">
+            <div class="relative">
+              <span class="material-symbols-outlined text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-lg">search</span>
+              <input type="text" placeholder="搜索字段名 (如: 发票, invoice...)" class="w-full bg-slate-900/80 border border-slate-600 rounded-lg text-sm pl-10 pr-4 py-2 focus:ring-primary focus:border-primary placeholder:text-slate-500">
+            </div>
+          </div>
+          <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+            <div>
+              <h4 class="text-xs font-bold text-primary mb-2 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm filled">smart_toy</span>
+                AI 智能推荐 (TOP MATCHES)
+              </h4>
+              <div class="space-y-2">
+                @if(modalSourceFields()[0]?.fields[0]; as field) {
+                  <label class="w-full flex items-center justify-between p-3 rounded-lg border-2 bg-slate-700/30 transition-colors cursor-pointer"
+                         [class]="modalSelectedFieldId() === field.id ? 'border-primary' : 'border-slate-700 hover:border-slate-600'">
+                      <div class="flex items-center gap-3">
+                          <input type="radio" name="source_field" [value]="field.id" [checked]="modalSelectedFieldId() === field.id" (change)="modalSelectedFieldId.set(field.id)" class="w-4 h-4 text-primary bg-slate-800 border-slate-600 focus:ring-primary focus:ring-offset-slate-800">
+                          <div>
+                              <div class="font-semibold text-white">{{ field.name }}</div>
+                              <div class="text-xs text-slate-400">Column {{field.column}} • {{ modalSourceFields()[0].name }}</div>
+                          </div>
+                      </div>
+                      <div class="flex items-center gap-2 px-2 py-0.5 rounded-full bg-green-900/30 border border-green-800">
+                          <span class="text-xs font-bold text-green-400">98% 匹配</span>
+                      </div>
+                  </label>
+                }
+                 @if(modalSourceFields()[0]?.fields[1]; as field) {
+                  <label class="w-full flex items-center justify-between p-3 rounded-lg border-2 bg-slate-700/30 transition-colors cursor-pointer"
+                         [class]="modalSelectedFieldId() === field.id ? 'border-primary' : 'border-slate-700 hover:border-slate-600'">
+                      <div class="flex items-center gap-3">
+                          <input type="radio" name="source_field" [value]="field.id" [checked]="modalSelectedFieldId() === field.id" (change)="modalSelectedFieldId.set(field.id)" class="w-4 h-4 text-primary bg-slate-800 border-slate-600 focus:ring-primary focus:ring-offset-slate-800">
+                          <div>
+                              <div class="font-semibold text-white">{{ field.name }}</div>
+                              <div class="text-xs text-slate-400">Column {{field.column}} • {{ modalSourceFields()[0].name }}</div>
+                          </div>
+                      </div>
+                      <div class="flex items-center gap-2 px-2 py-0.5 rounded-full bg-amber-900/30 border border-amber-800">
+                          <span class="text-xs font-bold text-amber-400">65% 匹配</span>
+                      </div>
+                  </label>
+                }
+              </div>
+            </div>
+             <div>
+              @for(sheet of modalSourceFields(); track sheet.name) {
+                <h4 class="text-xs font-bold text-slate-400 mb-2 mt-4 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm">grid_on_3</span>
+                  所有字段 ({{ sheet.name }})
+                </h4>
+                <div class="space-y-2">
+                   @for(field of sheet.fields; track field.id) {
+                      <label class="w-full flex items-center p-3 rounded-lg border-2 bg-slate-700/30 transition-colors cursor-pointer"
+                             [class]="modalSelectedFieldId() === field.id ? 'border-primary' : 'border-transparent hover:border-slate-600'">
+                          <div class="flex items-center gap-3">
+                              <input type="radio" name="source_field" [value]="field.id" [checked]="modalSelectedFieldId() === field.id" (change)="modalSelectedFieldId.set(field.id)" class="w-4 h-4 text-primary bg-slate-800 border-slate-600 focus:ring-primary focus:ring-offset-slate-800">
+                              <div>
+                                  <div class="font-semibold text-white">{{ field.name }}</div>
+                                  <div class="text-xs text-slate-400">Column {{field.column}} • {{ sheet.name }}</div>
+                              </div>
+                          </div>
+                      </label>
+                   }
+                </div>
+              }
+             </div>
+          </div>
+        </main>
+      </div>
+
+       <footer class="h-16 flex items-center justify-end px-6 border-t border-slate-700 shrink-0 gap-3 bg-slate-800/50">
+          <button (click)="closeMappingEditor()" class="px-5 py-2 rounded-lg border border-slate-600 text-slate-300 text-sm font-medium hover:bg-slate-700 transition-colors">
+              取消
+          </button>
+          <button (click)="saveMappingChanges()" [disabled]="!modalSelectedFieldId()" class="px-5 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-bold shadow-lg shadow-primary/25 transition-all flex items-center gap-2 active:scale-95 disabled:bg-slate-600 disabled:cursor-not-allowed disabled:shadow-none">
+              确认修改
+          </button>
+      </footer>
+    </div>
+  </div>
+}

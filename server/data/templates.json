@@ -1,0 +1,58 @@
+[
+  {
+    "id": "template-1768372423537",
+    "name": "XX承运商对账模版",
+    "targetFields": [
+      {
+        "id": "target-1",
+        "name": "单号",
+        "type": "String",
+        "description": "业务单单号",
+        "icon": "numbers"
+      },
+      {
+        "id": "target-2",
+        "name": "金额",
+        "type": "Currency",
+        "description": "金额",
+        "icon": "calendar_month"
+      },
+      {
+        "id": "target-3",
+        "name": "日期",
+        "type": "Date",
+        "description": "日期时间",
+        "icon": "attach_money"
+      }
+    ],
+    "fieldMappings": [
+      {
+        "targetFieldId": "target-1",
+        "sourceFieldId": "field-1-1",
+        "matchConfidence": 100,
+        "sourceFileName": "处理结果预览_2025-10-29 (1).xlsx",
+        "sourceFieldName": "单号"
+      },
+      {
+        "targetFieldId": "target-2",
+        "sourceFieldId": "field-1-2",
+        "matchConfidence": 90,
+        "sourceFileName": "处理结果预览_2025-10-29 (1).xlsx",
+        "sourceFieldName": "金额",
+        "processingRule": "金额保留2位小数",
+        "generatedCode": "const value = row['金额'];\nconst num = parseFloat(value);\nreturn num ? num.toFixed(2) : '0.00';"
+      },
+      {
+        "targetFieldId": "target-3",
+        "sourceFieldId": "field-1-4",
+        "matchConfidence": 95,
+        "sourceFileName": "处理结果预览_2025-10-29 (1).xlsx",
+        "sourceFieldName": "日期",
+        "processingRule": "日期保留为前4位",
+        "generatedCode": "const date = row['日期'];\nreturn date ? date.substring(0, 4) : '';"
+      }
+    ],
+    "createdAt": "2026-01-14T06:33:43.537Z",
+    "updatedAt": "2026-01-14T06:34:51.651Z"
+  }
+]
