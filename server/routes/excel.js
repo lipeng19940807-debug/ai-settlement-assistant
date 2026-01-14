@@ -273,7 +273,26 @@ router.post('/process', async (req, res, next) => {
                     }
                 } else if (mapping.sourceFieldId && mapping.sourceFieldName) {
                     // 没有加工规则，直接映射源字段
-                    value = namedRow[mapping.sourceFieldName] ?? '';
+                    // 1. 尝试直接精确匹配
+                    let val = namedRow[mapping.sourceFieldName];
+
+                    // 2. 如果没找到，尝试去除空格后的容错匹配
+                    if (val === undefined) {
+                        // 构建一个临时的归一化映射（在循环外构建性能更好，但这里为了最小改动先这样做，或者在上面构建）
+                        // 优化：我们应该在循环外构建 normalizedMap
+                        const normalizedSource = mapping.sourceFieldName ? String(mapping.sourceFieldName).trim() : '';
+
+                        // 查找 namedRow 中是否有 key 的 trim 版本匹配
+                        const matchedKey = Object.keys(namedRow).find(
+                            k => String(k).trim() === normalizedSource
+                        );
+
+                        if (matchedKey) {
+                            val = namedRow[matchedKey];
+                        }
+                    }
+
+                    value = val ?? '';
                 }
 
                 result[targetFieldName] = value;
