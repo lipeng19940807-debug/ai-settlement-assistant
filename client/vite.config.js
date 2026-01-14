@@ -18,4 +18,8 @@ export default defineConfig({
             },
         },
     },
+    define: {
+        // 如果环境变量未定义，使其为空字符串，避免构建错误
+        'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || '')
+    }
 })
